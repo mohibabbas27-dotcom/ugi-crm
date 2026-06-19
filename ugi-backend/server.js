@@ -602,4 +602,4 @@ app.post('/api/blast/start', requireAuth, async (req, res) => {
   })();
 });
 
-app.listen(3001, () => console.log('UGI CRM Backend running: http://localhost:3001'));
+app.listen(process.env.PORT || 3001, () => console.log('UGI CRM Backend running on port', process.env.PORT || 3001));
