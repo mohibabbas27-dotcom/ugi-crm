@@ -602,4 +602,8 @@ app.post('/api/blast/start', requireAuth, async (req, res) => {
   })();
 });
 
-app.listen(process.env.PORT || 3001, () => console.log('UGI CRM Backend running on port', process.env.PORT || 3001));
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(`UGI CRM Backend running on port ${PORT}`);
+});
