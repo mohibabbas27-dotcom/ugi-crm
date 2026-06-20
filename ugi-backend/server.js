@@ -12,8 +12,21 @@ const jwt = require('jsonwebtoken');
 const app = express();
 
 // ========== CORS FIX — yeh pehle aana chahiye ==========
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://ugi-crm.vercel.app',
+  /\.vercel\.app$/  // allow any vercel preview deployments too
+];
+
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser requests (e.g. curl, server-to-server)
+    const allowed = allowedOrigins.some(o =>
+      o instanceof RegExp ? o.test(origin) : o === origin
+    );
+    if (allowed) return callback(null, true);
+    return callback(new Error('Not allowed by CORS: ' + origin));
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -70,41 +83,60 @@ function initWhatsApp(key) {
   wa.status = 'connecting';
   wa.qr = '';
 
-  const client = new Client({
-    authStrategy: new LocalAuth({ clientId: wa.clientId }),
-    puppeteer: {
-      executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  // NOTE: WhatsApp/Puppeteer features will NOT work on Railway (Linux container,
+  // no Edge browser installed, no persistent Chromium). This will fail safely
+  // instead of crashing the whole server.
+  try {
+    const launchOptions = {
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       protocolTimeout: 60000
+    };
+
+    // Only set a Windows-specific executablePath if it actually exists (local dev).
+    const winEdgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
+    if (process.platform === 'win32' && fs.existsSync(winEdgePath)) {
+      launchOptions.executablePath = winEdgePath;
     }
-  });
 
-  client.on('qr', qr => {
-    wa.qr = qr;
-    wa.status = 'qr';
-    console.log(`[${key}] QR Ready`);
-  });
+    const client = new Client({
+      authStrategy: new LocalAuth({ clientId: wa.clientId }),
+      puppeteer: launchOptions
+    });
 
-  client.on('ready', () => {
-    wa.status = 'ready';
-    wa.qr = '';
-    console.log(`[${key}] WhatsApp Connected!`);
-  });
+    client.on('qr', qr => {
+      wa.qr = qr;
+      wa.status = 'qr';
+      console.log(`[${key}] QR Ready`);
+    });
 
-  client.on('auth_failure', () => {
+    client.on('ready', () => {
+      wa.status = 'ready';
+      wa.qr = '';
+      console.log(`[${key}] WhatsApp Connected!`);
+    });
+
+    client.on('auth_failure', () => {
+      wa.status = 'disconnected';
+      console.log(`[${key}] Auth Failed`);
+    });
+
+    client.on('disconnected', () => {
+      wa.status = 'disconnected';
+      wa.client = null;
+      console.log(`[${key}] Disconnected`);
+    });
+
+    client.initialize().catch(err => {
+      wa.status = 'disconnected';
+      console.error(`[${key}] WhatsApp init failed: ${err.message}`);
+    });
+
+    wa.client = client;
+  } catch (err) {
     wa.status = 'disconnected';
-    console.log(`[${key}] Auth Failed`);
-  });
-
-  client.on('disconnected', () => {
-    wa.status = 'disconnected';
-    wa.client = null;
-    console.log(`[${key}] Disconnected`);
-  });
-
-  client.initialize();
-  wa.client = client;
+    console.error(`[${key}] WhatsApp setup failed: ${err.message}`);
+  }
 }
 
 // ========== HELPERS ==========
