@@ -92,7 +92,7 @@ const UNITS = ["UGI", "Unit 1", "Unit 2"];
 const UNIT_KEYS = { "UGI": "ugi", "Unit 1": "unit1", "Unit 2": "unit2" };
 const UNIT_EMOJI = { "UGI": "🏛️", "Unit 1": "1️⃣", "Unit 2": "2️⃣" };
 const defaultWaAll = { ugi: { status: "disconnected", qr: null }, unit1: { status: "disconnected", qr: null }, unit2: { status: "disconnected", qr: null } };
-const API_BASE = "https://ugi-crm-production.up.railway.app";
+const API_BASE = "https://unviable-luster-motocross.ngrok-free.dev";
 const AUTH_TOKEN_KEY = "ugi_crm_jwt";
 
 export default function App() {
@@ -276,7 +276,7 @@ export default function App() {
     const r = await authFetch(`${API_BASE}/api/contacts${qs ? `?${qs}` : ""}`);
     const result = await r.json();
     const data = result.contacts || [];
-    const csv = ["mobile,name,type,unit,designation,campus,label", ...data.map(c => `${c.mobile},"${c.name}","${c.type}","${c.unit||""}","${c.designation||""}","${c.campus||""}","${c.label||""}"`)].join("\n");
+    const csv = ["mobile,name,type,unit,designation,campus,label", ...data.map(c => `${c.mobile},"${c.name}","${c.type}","${c.unit||""}","${c.designation||""}","${c.campus||""}","${c.label||""}"`)];
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
     a.download = `ugi_${unitFilter}_${filter}_${Date.now()}.csv`;
@@ -343,30 +343,30 @@ export default function App() {
           </div>
 
           <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
-            <button type="button" onClick={() => { setAuthMode("login"); setAuthError(""); }} style={{ flex: 1, padding: "10px 12px", borderRadius: 8, border: "none", cursor: "pointer", fontWeight: 700, background: authMode === "login" ? "#4f46e5" : "#e5e7eb", color: authMode === "login" ? "white" : "#374151" }}>Login</button>
-            <button type="button" onClick={() => { setAuthMode("signup"); setAuthError(""); }} style={{ flex: 1, padding: "10px 12px", borderRadius: 8, border: "none", cursor: "pointer", fontWeight: 700, background: authMode === "signup" ? "#4f46e5" : "#e5e7eb", color: authMode === "signup" ? "white" : "#374151" }}>Signup</button>
+            <button type="button" onClick={() => { setAuthMode("login"); setAuthError(""); }} style={{ flex: 1, padding: "10px 12px", borderRadius: 8, border: "none", cursor: "pointer", fontWeight: 700 }}>Login</button>
+            <button type="button" onClick={() => { setAuthMode("signup"); setAuthError(""); }} style={{ flex: 1, padding: "10px 12px", borderRadius: 8, border: "none", cursor: "pointer", fontWeight: 700 }}>Sign up</button>
           </div>
 
           {authMode === "signup" && (
             <label style={{ display: "block", marginBottom: 12, color: "#374151", fontWeight: 600, fontSize: 13 }}>
               Name
-              <input value={authForm.name} onChange={e => setAuthForm({ ...authForm, name: e.target.value })} style={{ marginTop: 6, width: "100%", boxSizing: "border-box", padding: "11px 12px", borderRadius: 8, border: "1px solid #d1d5db", fontSize: 14 }} />
+              <input value={authForm.name} onChange={e => setAuthForm({ ...authForm, name: e.target.value })} style={{ marginTop: 6, width: "100%", boxSizing: "border-box", padding: "11px 12px", borderRadius: 8, border: "1px solid #d1d5db" }} />
             </label>
           )}
 
           <label style={{ display: "block", marginBottom: 12, color: "#374151", fontWeight: 600, fontSize: 13 }}>
             Email
-            <input type="email" required value={authForm.email} onChange={e => setAuthForm({ ...authForm, email: e.target.value })} style={{ marginTop: 6, width: "100%", boxSizing: "border-box", padding: "11px 12px", borderRadius: 8, border: "1px solid #d1d5db", fontSize: 14 }} />
+            <input type="email" required value={authForm.email} onChange={e => setAuthForm({ ...authForm, email: e.target.value })} style={{ marginTop: 6, width: "100%", boxSizing: "border-box", padding: "11px 12px", borderRadius: 8, border: "1px solid #d1d5db" }} />
           </label>
 
           <label style={{ display: "block", marginBottom: 16, color: "#374151", fontWeight: 600, fontSize: 13 }}>
             Password
-            <input type="password" required minLength={6} value={authForm.password} onChange={e => setAuthForm({ ...authForm, password: e.target.value })} style={{ marginTop: 6, width: "100%", boxSizing: "border-box", padding: "11px 12px", borderRadius: 8, border: "1px solid #d1d5db", fontSize: 14 }} />
+            <input type="password" required minLength={6} value={authForm.password} onChange={e => setAuthForm({ ...authForm, password: e.target.value })} style={{ marginTop: 6, width: "100%", boxSizing: "border-box", padding: "11px 12px", borderRadius: 8, border: "1px solid #d1d5db" }} />
           </label>
 
           {authError && <div style={{ marginBottom: 14, padding: 10, borderRadius: 8, background: "#fef2f2", color: "#dc2626", fontSize: 13, fontWeight: 600 }}>{authError}</div>}
 
-          <button type="submit" disabled={authLoading} style={{ width: "100%", padding: "12px 16px", borderRadius: 8, border: "none", background: authLoading ? "#9ca3af" : "#4f46e5", color: "white", cursor: authLoading ? "not-allowed" : "pointer", fontWeight: 700, fontSize: 15 }}>
+          <button type="submit" disabled={authLoading} style={{ width: "100%", padding: "12px 16px", borderRadius: 8, border: "none", background: authLoading ? "#9ca3af" : "#4f46e5", color: "white", fontWeight: 700 }}>
             {authLoading ? "Please wait..." : authMode === "login" ? "Login" : "Create Account"}
           </button>
         </form>
@@ -386,7 +386,7 @@ export default function App() {
       </div>
 
       <div style={{ display: "flex", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
-        {[{ label: "Total", value: stats.all || 0, color: "#4f46e5", bg: "#ede9fe" }, { label: "Teachers (T)", value: stats.T || 0, color: "#1d4ed8", bg: "#dbeafe" }, { label: "Non-Teaching", value: stats.NT || 0, color: "#92400e", bg: "#fef3c7" }, { label: "Management", value: stats.TLM || 0, color: "#9d174d", bg: "#fce7f3" }, { label: "Students", value: stats.Student || 0, color: "#065f46", bg: "#d1fae5" }].map(s => (
+        {[{ label: "Total", value: stats.all || 0, color: "#4f46e5", bg: "#ede9fe" }, { label: "Teachers (T)", value: stats.T || 0, color: "#1d4ed8", bg: "#dbeafe" }, { label: "Non-Teaching", value: stats.NT || 0, color: "#92400e", bg: "#fef3c7" }].map(s => (
           <div key={s.label} style={{ padding: "10px 18px", background: s.bg, borderRadius: 10, minWidth: 90, textAlign: "center" }}>
             <div style={{ fontSize: 20, fontWeight: 700, color: s.color }}>{s.value.toLocaleString()}</div>
             <div style={{ fontSize: 11, color: s.color }}>{s.label}</div>
@@ -414,14 +414,18 @@ export default function App() {
       {activeTab === "import" && (
         <div>
           <div style={{ display: "flex", gap: 12, marginBottom: 20 }}>
-            {[["student", "🎓", "Student CSV", "Format: Name (P05-TS-A Hadia), Mobile"], ["hr", "👨‍🏫", "HR Staff CSV", "Format: Unit 1(T) JBT-Muhammad Asif, Phone"]].map(([mode, emoji, label, hint]) => (
-              <div key={mode} onClick={() => { setImportMode(mode); setPreview([]); setAllRows([]); setMsg(""); }}
-                style={{ flex: 1, padding: "16px 20px", borderRadius: 12, cursor: "pointer", textAlign: "center", border: `2px solid ${importMode === mode ? "#4f46e5" : "#e5e7eb"}`, background: importMode === mode ? "#ede9fe" : "#f8fafc" }}>
-                <div style={{ fontSize: 28 }}>{emoji}</div>
-                <div style={{ fontWeight: 700, color: importMode === mode ? "#4f46e5" : "#374151", marginTop: 4 }}>{label}</div>
-                <div style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>{hint}</div>
-              </div>
-            ))}
+            {["student", "hr"].map(mode => {
+              const cfg = mode === "student" ? ["student", "🎓", "Student CSV", "Format: Name (P05-TS-A Hadia), Mobile"] : ["hr", "👨‍🏫", "HR Staff CSV", "Format: Unit 1(T) JBT-Muhammad Asif, Phone"];
+              const [m, emoji, label, hint] = cfg;
+              return (
+                <div key={m} onClick={() => { setImportMode(m); setPreview([]); setAllRows([]); setMsg(""); }}
+                  style={{ flex: 1, padding: "16px 20px", borderRadius: 12, cursor: "pointer", textAlign: "center", border: `2px solid ${importMode === m ? "#4f46e5" : "#e5e7eb"}`, background: importMode === m ? "white" : "#f8fafc" }}>
+                  <div style={{ fontSize: 28 }}>{emoji}</div>
+                  <div style={{ fontWeight: 700, color: importMode === m ? "#4f46e5" : "#374151", marginTop: 4 }}>{label}</div>
+                  <div style={{ fontSize: 12, color: "#6b7280", marginTop: 2 }}>{hint}</div>
+                </div>
+              );
+            })}
           </div>
 
           {importMode === "student" && (
@@ -461,7 +465,7 @@ export default function App() {
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
                   <thead>
                     <tr style={{ background: "#f3f4f6" }}>
-                      {["Name", "Mobile", "Type", "Unit", "Designation", "Campus"].map(h => (
+                      { ["Name", "Mobile", "Type", "Unit", "Designation", "Campus"].map(h => (
                         <th key={h} style={{ padding: "8px 12px", textAlign: "left", borderBottom: "2px solid #e5e7eb" }}>{h}</th>
                       ))}
                     </tr>
@@ -471,7 +475,7 @@ export default function App() {
                       <tr key={i} style={{ background: i % 2 === 0 ? "white" : "#f9fafb" }}>
                         <td style={{ padding: "6px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.name}</td>
                         <td style={{ padding: "6px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.mobile}</td>
-                        <td style={{ padding: "6px 12px", borderBottom: "1px solid #e5e7eb" }}><span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 12, fontWeight: 600, ...typeColor(c.type) }}>{c.type}</span></td>
+                        <td style={{ padding: "6px 12px", borderBottom: "1px solid #e5e7eb" }}><span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 12, fontWeight: 600, ...typeColor(c.type) }} /></td>
                         <td style={{ padding: "6px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.unit && <span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 12, fontWeight: 600, ...unitColor(c.unit) }}>{c.unit}</span>}</td>
                         <td style={{ padding: "6px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.designation}</td>
                         <td style={{ padding: "6px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.campus}</td>
@@ -480,7 +484,7 @@ export default function App() {
                   </tbody>
                 </table>
               </div>
-              <button onClick={saveToDatabase} style={{ marginTop: 16, padding: "12px 28px", background: "#059669", color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 15 }}>
+              <button onClick={saveToDatabase} style={{ marginTop: 16, padding: "12px 28px", background: "#059669", color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>
                 💾 Save All {allRows.length.toLocaleString()} Contacts
               </button>
             </div>
@@ -512,7 +516,7 @@ export default function App() {
                       <div style={{ marginTop: 4, fontSize: 12, color: "#6b7280" }}>{unit} ke sab contacts ko yeh number message karega</div>
                     </div>
                     <div style={{ display: "flex", gap: 8 }}>
-                      {wa.status !== "ready" && <button onClick={() => connectWa(key)} style={{ padding: "9px 18px", background: "#10b981", color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600 }}>🔌 Connect</button>}
+                      {wa.status !== "ready" && <button onClick={() => connectWa(key)} style={{ padding: "9px 18px", background: "#10b981", color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600 }}>Connect</button>}
                       {wa.status === "ready" && <button onClick={() => disconnectWa(key)} style={{ padding: "9px 18px", background: "#ef4444", color: "white", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600 }}>Disconnect</button>}
                       <button onClick={fetchWaAll} style={{ padding: "9px 14px", background: "#e5e7eb", color: "#374151", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 600 }}>🔄</button>
                     </div>
@@ -542,7 +546,7 @@ export default function App() {
                 const uc = unitColor(u);
                 return (
                   <div key={u} onClick={() => setBlastUnit(u)}
-                    style={{ padding: "12px 20px", borderRadius: 10, cursor: "pointer", textAlign: "center", minWidth: 120, border: `2px solid ${blastUnit === u ? uc.color : "#e5e7eb"}`, background: blastUnit === u ? uc.bg : "white" }}>
+                    style={{ padding: "12px 20px", borderRadius: 10, cursor: "pointer", textAlign: "center", minWidth: 120, border: `2px solid ${blastUnit === u ? uc.color : "#e5e7eb"}`, background: blastUnit === u ? "#fff" : "#f8fafc" }}>
                     <div style={{ fontSize: 22 }}>{UNIT_EMOJI[u]}</div>
                     <div style={{ fontWeight: 700, color: uc.color, marginTop: 2 }}>{u}</div>
                     <div style={{ fontSize: 11, marginTop: 2 }}><span style={{ color: waStatusColor(wa.status), fontWeight: 600 }}>● {waStatusLabel(wa.status)}</span></div>
@@ -559,7 +563,7 @@ export default function App() {
           </div>
 
           <div style={{ marginBottom: 20, padding: 16, background: "#f8fafc", borderRadius: 12, border: "2px solid #e5e7eb" }}>
-            <div style={{ fontWeight: 700, color: "#1a1a2e", marginBottom: 10, fontSize: 15 }}>👥 Step 2 — Kaun se log? <span style={{ fontWeight: 400, fontSize: 13, color: "#6b7280" }}>(sirf {blastUnit} mein se)</span></div>
+            <div style={{ fontWeight: 700, color: "#1a1a2e", marginBottom: 10, fontSize: 15 }}>👥 Step 2 — Kaun se log? <span style={{ fontWeight: 400, fontSize: 13, color: "#6b7280" }}>(sirf available)</span></div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {[["all", "🌍 Sab"], ["Student", "🎓 Students"], ["T", "👨‍🏫 Teachers (T)"], ["NT", "🧑‍💼 Non-Teaching (NT)"], ["TLM", "🏫 Management"]].map(([val, label]) => (
                 <button key={val} onClick={() => setBlastType(val)} style={btn(blastType === val)}>{label}</button>
@@ -593,7 +597,7 @@ export default function App() {
           <div style={{ padding: 20, background: blastRunning ? "#fef3c7" : "#f0fdf4", borderRadius: 12, border: `2px solid ${blastRunning ? "#f59e0b" : "#10b981"}` }}>
             {!blastRunning ? (
               <button onClick={startBlast} disabled={waAll[UNIT_KEYS[blastUnit]]?.status !== "ready"}
-                style={{ padding: "14px 32px", background: waAll[UNIT_KEYS[blastUnit]]?.status === "ready" ? "#10b981" : "#9ca3af", color: "white", border: "none", borderRadius: 10, cursor: waAll[UNIT_KEYS[blastUnit]]?.status === "ready" ? "pointer" : "not-allowed", fontWeight: 700, fontSize: 16, width: "100%" }}>
+                style={{ padding: "14px 32px", background: waAll[UNIT_KEYS[blastUnit]]?.status === "ready" ? "#10b981" : "#9ca3af", color: "white", border: "none", borderRadius: 10, cursor: waAll[UNIT_KEYS[blastUnit]]?.status === "ready" ? "pointer" : "not-allowed", fontWeight: 700 }}>
                 🚀 {UNIT_EMOJI[blastUnit]} {blastUnit} — {blastType === "all" ? "Sab" : blastType} ko Blast Karo
               </button>
             ) : (
@@ -636,7 +640,7 @@ export default function App() {
           <div style={{ marginBottom: 16 }}>
             <div style={{ fontSize: 12, color: "#6b7280", marginBottom: 6, fontWeight: 600 }}>TYPE:</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {[["all", "All"], ["Student", "Students"], ["T", "Teachers (T)"], ["NT", "Non-Teaching (NT)"], ["TLM", "Management"]].map(([val, label]) => (
+              {[['all', 'All'], ['Student', 'Students'], ['T', 'Teachers (T)'], ['NT', 'Non-Teaching (NT)'], ['TLM', 'Management']].map(([val, label]) => (
                 <button key={val} onClick={() => setFilter(val)} style={btn(filter === val)}>{label}</button>
               ))}
             </div>
@@ -656,7 +660,7 @@ export default function App() {
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
                 <thead>
                   <tr style={{ background: "#f3f4f6" }}>
-                    {["Name", "Mobile", "Type", "Unit", "Designation", "Campus"].map(h => (
+                    { ["Name", "Mobile", "Type", "Unit", "Designation", "Campus"].map(h => (
                       <th key={h} style={{ padding: "10px 12px", textAlign: "left", borderBottom: "2px solid #e5e7eb" }}>{h}</th>
                     ))}
                   </tr>
@@ -666,7 +670,7 @@ export default function App() {
                     <tr key={c.id} style={{ background: i % 2 === 0 ? "white" : "#f9fafb" }}>
                       <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.name}</td>
                       <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.mobile}</td>
-                      <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e7eb" }}><span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 12, fontWeight: 600, ...typeColor(c.type) }}>{c.type}</span></td>
+                      <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e7eb" }}><span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 12, fontWeight: 600, ...typeColor(c.type) }} /></td>
                       <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.unit && <span style={{ padding: "2px 8px", borderRadius: 12, fontSize: 12, fontWeight: 600, ...unitColor(c.unit) }}>{c.unit}</span>}</td>
                       <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.designation}</td>
                       <td style={{ padding: "8px 12px", borderBottom: "1px solid #e5e7eb" }}>{c.campus}</td>
