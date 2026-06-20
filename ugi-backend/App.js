@@ -96,7 +96,7 @@ export default function App() {
     await fetch("http://localhost:3001/api/wa/connect", { method: "POST" });
     setWaStatus("connecting");
     const poll = setInterval(async () => {
-      const r = await fetch("http://localhost:3001/api/wa/status");
+      const r = await fetch(https://ugi-crm-production.up.railway.app);
       const d = await r.json();
       setWaStatus(d.status);
       setWaQr(d.qr);
