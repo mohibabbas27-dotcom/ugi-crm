@@ -92,7 +92,7 @@ const UNITS = ["UGI", "Unit 1", "Unit 2"];
 const UNIT_KEYS = { "UGI": "ugi", "Unit 1": "unit1", "Unit 2": "unit2" };
 const UNIT_EMOJI = { "UGI": "🏛️", "Unit 1": "1️⃣", "Unit 2": "2️⃣" };
 const defaultWaAll = { ugi: { status: "disconnected", qr: null }, unit1: { status: "disconnected", qr: null }, unit2: { status: "disconnected", qr: null } };
-const API_BASE = "http://localhost:3001";
+const API_BASE = "https://ugi-crm-production.up.railway.app";
 const AUTH_TOKEN_KEY = "ugi_crm_jwt";
 
 export default function App() {
